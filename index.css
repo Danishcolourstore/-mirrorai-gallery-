@@ -1,0 +1,233 @@
+/* Self-hosted fonts — no external CDN dependency (works on Jio/restricted ISPs) */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/cormorant-garamond-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/cormorant-garamond-400i.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/dm-sans-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/playfair-display-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Playfair Display';
+  font-style: italic;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url('/fonts/playfair-display-400i.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('/fonts/inter-variable.woff2') format('woff2');
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #F5ECD7;
+    --foreground: #1A0F00;
+
+    --card: #FFFDF5;
+    --card-foreground: #1A0F00;
+
+    --popover: #FFFDF5;
+    --popover-foreground: #1A0F00;
+
+    --primary: #8B6914;
+    --primary-foreground: #FFFFFF;
+
+    --secondary: #C49A3C;
+    --secondary-foreground: #1A0F00;
+
+    --muted: #E8D5A3;
+    --muted-foreground: #8B6914;
+
+    --accent: #A67C2A;
+    --accent-foreground: #FFFFFF;
+
+    --gold: #8B6914;
+    --gold-hover: #5C4008;
+
+    --destructive: #FF3B30;
+    --destructive-foreground: #FFFFFF;
+
+    --mirrorlive: #FF3B30;
+    --mirrorlive-foreground: #FFFFFF;
+
+    --border: #C49A3C;
+    --input: #C49A3C;
+    --ring: #8B6914;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: #1A0F00;
+    --sidebar-foreground: #C49A3C;
+    --sidebar-primary: #C49A3C;
+    --sidebar-primary-foreground: #FFFFFF;
+    --sidebar-accent: #5C4008;
+    --sidebar-accent-foreground: #C49A3C;
+    --sidebar-border: #5C4008;
+    --sidebar-ring: #8B6914;
+  }
+
+  .dark {
+    --background: #1A0F00;
+    --foreground: #FFFFFF;
+    --card: #2A1A05;
+    --card-foreground: #FFFFFF;
+    --popover: #2A1A05;
+    --popover-foreground: #FFFFFF;
+    --primary: #C49A3C;
+    --primary-foreground: #1A0F00;
+    --secondary: #5C4008;
+    --secondary-foreground: #C49A3C;
+    --muted: #3A2510;
+    --muted-foreground: #C49A3C;
+    --accent: #A67C2A;
+    --accent-foreground: #FFFFFF;
+    --destructive: #FF3B30;
+    --destructive-foreground: #FFFFFF;
+    --border: #5C4008;
+    --input: #5C4008;
+    --ring: #C49A3C;
+    --sidebar-background: #1A0F00;
+    --sidebar-foreground: #C49A3C;
+    --sidebar-primary: #C49A3C;
+    --sidebar-primary-foreground: #FFFFFF;
+    --sidebar-accent: #5C4008;
+    --sidebar-accent-foreground: #C49A3C;
+    --sidebar-border: #5C4008;
+    --sidebar-ring: #C49A3C;
+    --gold: #C49A3C;
+    --gold-hover: #8B6914;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+    font-weight: 600;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: Inter, sans-serif;
+    font-weight: 600;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: rgba(139, 105, 20, 0.1);
+    font-size: 14px;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-weight: 800 !important;
+    letter-spacing: 0;
+    color: var(--foreground);
+  }
+
+  h4, h5, h6 {
+    font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    font-weight: 700 !important;
+    letter-spacing: 0;
+    color: var(--foreground);
+  }
+
+  button {
+    font-weight: 700 !important;
+  }
+
+  label {
+    font-weight: 700 !important;
+  }
+
+  /* Scrollbar — bold warm */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+  }
+}
+
+/* Animations */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+/* Offline banner */
+.offline-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: var(--destructive);
+  color: var(--destructive-foreground);
+  text-align: center;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Lazy-loaded image fade in */
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+img[loading="lazy"].loaded,
+img[loading="lazy"][complete] {
+  opacity: 1;
+}
+
+/* Warm skeleton shimmer */
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Ken Burns zoom for cover photos */
+@keyframes ken-burns {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+.animate-ken-burns {
+  animation: ken-burns 20s ease-in-out infinite alternate;
+}

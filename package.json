@@ -1,0 +1,12 @@
+{
+  "name": "mirrorai",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w client",
+    "dev:server": "npm run dev -w server"
+  }
+}
