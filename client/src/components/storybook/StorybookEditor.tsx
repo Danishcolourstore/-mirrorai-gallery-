@@ -1,11 +1,8 @@
-import { useState, useCallback, useRef } from "react";
-import { toPng } from "html-to-image";
-import { saveAs } from "file-saver";
-import JSZip from "jszip";
+import { useState, useCallback } from "react";
 import { Check, X, ImageIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
+import { useExportSlides } from "@/hooks/use-export-slides";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -44,10 +41,9 @@ export function StorybookEditor({ eventId, eventName, photos }: StorybookEditorP
   const [slides, setSlides] = useState<Slide[]>([createSlide("single")]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [previewOpen, setPreviewOpen] = useState(false);
-  const [exporting, setExporting] = useState(false);
   const [rightTab, setRightTab] = useState<string>("photos");
 
-  const exportRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const { progress, exporting, exportSlides, registerNode } = useExportSlides();
 
   const activeSlide = slides[activeIndex] ?? slides[0];
 
@@ -133,26 +129,18 @@ export function StorybookEditor({ eventId, eventName, photos }: StorybookEditorP
       toast({ title: "Nothing to export", description: "Add photos to at least one slide." });
       return;
     }
-    setExporting(true);
-    try {
-      const zip = new JSZip();
-      for (let i = 0; i < slides.length; i++) {
-        const el = exportRefs.current.get(slides[i].id);
-        if (!el) continue;
-        const dataUrl = await toPng(el, { width: 1080, height: 1080, pixelRatio: 1 });
-        const base64 = dataUrl.split(",")[1];
-        zip.file(`slide-${String(i + 1).padStart(2, "0")}.png`, base64, { base64: true });
-      }
-      const blob = await zip.generateAsync({ type: "blob" });
-      saveAs(blob, `${storyTitle.replace(/[^a-zA-Z0-9]/g, "_")}.zip`);
-      toast({ title: "Exported!", description: `${slides.length} slides saved as ZIP.` });
-    } catch (err) {
-      console.error("Export failed:", err);
-      toast({ title: "Export failed", description: "Could not generate images.", variant: "destructive" });
-    } finally {
-      setExporting(false);
+    const result = await exportSlides(slides, storyTitle);
+    if (result.success) {
+      toast({
+        title: "Instagram Carousel Ready!",
+        description: `${result.count} slide${result.count !== 1 ? "s" : ""} exported at 1080×1080.`,
+      });
+    } else if (result.reason === "render-failed") {
+      toast({ title: "Export failed", description: "Could not render slides.", variant: "destructive" });
+    } else if (result.reason === "error") {
+      toast({ title: "Export failed", description: "An unexpected error occurred.", variant: "destructive" });
     }
-  }, [slides, storyTitle, toast]);
+  }, [slides, storyTitle, exportSlides, toast]);
 
   const selectedPhotoIds = new Set(activeSlide.photos.map((p) => p.id));
 
@@ -165,6 +153,8 @@ export function StorybookEditor({ eventId, eventName, photos }: StorybookEditorP
         onPreview={() => setPreviewOpen(true)}
         onExport={handleExport}
         exporting={exporting}
+        exportProgress={progress}
+        slideCount={slides.filter((s) => s.photos.length > 0).length}
       />
 
       <div className="flex flex-1 min-h-0">
@@ -281,17 +271,14 @@ export function StorybookEditor({ eventId, eventName, photos }: StorybookEditorP
         </div>
       </div>
 
-      {/* Hidden export containers — rendered at 1080x1080 offscreen */}
+      {/* Hidden export containers — rendered at 1080×1080 offscreen */}
       <div className="fixed" style={{ left: -9999, top: -9999 }}>
         {slides.map((slide) => (
           <SlideCanvas
             key={slide.id}
             slide={slide}
             size={1080}
-            innerRef={(el) => {
-              if (el) exportRefs.current.set(slide.id, el);
-              else exportRefs.current.delete(slide.id);
-            }}
+            innerRef={registerNode(slide.id)}
           />
         ))}
       </div>
