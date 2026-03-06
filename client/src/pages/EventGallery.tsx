@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { Session } from "@supabase/supabase-js";
+import { BookImage } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import DashboardLayout from "@/components/DashboardLayout";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface Props {
@@ -51,11 +53,20 @@ export default function EventGallery({ session }: Props) {
   return (
     <DashboardLayout>
       {event && (
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold">{event.name}</h1>
-          <p className="text-muted-foreground mt-1">
-            {photos.length} photos
-          </p>
+        <div className="flex items-start justify-between mb-6">
+          <div>
+            <h1 className="text-3xl font-bold">{event.name}</h1>
+            <p className="text-muted-foreground mt-1">
+              {photos.length} photos
+            </p>
+          </div>
+          <Button
+            onClick={() => navigate(`/event/${id}/storybook`)}
+            className="gap-2"
+          >
+            <BookImage className="h-4 w-4" />
+            Create Storybook
+          </Button>
         </div>
       )}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
