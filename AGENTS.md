@@ -25,3 +25,4 @@ MirrorAI is a premium photo gallery and delivery platform for professional photo
 - **Import alias:** `@/` maps to `client/src/` via both Vite (`resolve.alias`) and TypeScript (`paths`). All shadcn/ui components live under `client/src/components/ui/`.
 - **Tailwind warning:** Build produces a harmless warning about `duration-[1200ms]` ambiguity in GiftBoxAnimation — can be ignored.
 - **Public assets:** Fonts are in `client/public/fonts/`, icons/images in `client/public/`.
+- **StorybookEditor:** The carousel builder at `/event/:id/storybook` works without Supabase using sample Unsplash photos. With a real Supabase connection, it fetches photos from the `photos` table for the given event. Export uses `html-to-image` to rasterize slides at 1080×1080 to PNG, zipped via `jszip`.
