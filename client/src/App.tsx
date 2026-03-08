@@ -10,6 +10,7 @@ import Events from "./pages/Events";
 import EventGallery from "./pages/EventGallery";
 import PublicGallery from "./pages/PublicGallery";
 import StorybookEditorPage from "./pages/StorybookEditorPage";
+import ColourTouchPage from "./pages/ColourTouchPage";
 import NotFound from "./pages/NotFound";
 
 const App = () => {
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/event/:id" element={<EventGallery session={session} />} />
           <Route path="/event/:id/storybook" element={<StorybookEditorPage session={session} />} />
           <Route path="/gallery/:slug" element={<PublicGallery />} />
+          <Route path="/colourtouch" element={<ColourTouchPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
